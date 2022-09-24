@@ -2,15 +2,14 @@
 
 namespace App;
 
-use App\Notifications\UserRegistered;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\HasRole;
 
-
-class User extends Authenticatable
+class User extends Model
 {
     use Notifiable;
 
@@ -20,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'idnum','fname', 'mname', 'lname', 'course', 'year', 'email', 'password',
+        'course_id','role_id','idnum','fname', 'mname', 'lname','email', 'password',
     ];
 
     /**
@@ -40,14 +39,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function roles(){ 
+    public function roles(){
         return $this->belongsToMany( 'App\Role');
    }
 
-   public function hasAnyRoles($roles) { 
+   public function hasAnyRoles($roles) {
     return null !== $this->roles()->whereIn('name', $roles)->first();
    }
-   public function hasAnyRole($role) { 
+   public function hasAnyRole($role) {
     return null !== $this->roles()->where('name', $role)->first();
    }
 }
